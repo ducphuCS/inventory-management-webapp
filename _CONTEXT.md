@@ -5,6 +5,7 @@
 
 ## Engineer Decisions:
 - **Python enviroment:** Use `uv` for dependency management and environment management.
+- **Topic:** An application to add, store, and view the receipts of grocery.
 
 ## 🎯 Next Actions:
 
