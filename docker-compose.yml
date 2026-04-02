@@ -1,0 +1,32 @@
+services:
+  webapp-frontend:
+    build: .
+    container_name: webapp-frontend
+    command: ["uv", "run", "streamlit", "run", "app/frontend/app.py"]
+    ports:
+      - "8501:8501"
+    environment:
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+      - BACKEND_URL=http://webapp-backend:8000
+    networks:
+      - prototype-webapp-service
+    depends_on:
+      - webapp-backend
+    restart: unless-stopped
+
+  webapp-backend:
+    build: .
+    container_name: webapp-backend
+    command: ["uv", "run", "fastapi", "run", "app/backend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+    environment:
+      - GIN_SERVICES_URL=http://inventory-service:8080/v1
+    networks:
+      - prototype-webapp-service
+    restart: unless-stopped
+
+networks:
+  prototype-webapp-service:
+    external: true
